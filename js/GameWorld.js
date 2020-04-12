@@ -1,7 +1,7 @@
 class Gameworld{
     constructor(eventHandler, statesManager){
-        this.tank = new Tank({x: 200, y: 200}, 0 , {x: 25, y: 50});
-        this.tank2 = new Tank2({x: 400, y: 200}, 0 , {x: 25, y: 50})
+        this.tank = new Tank({x: 100, y: 100}, 0 , {x: 25, y: 50});
+        this.tank2 = new Tank2({x:1100,y:500}, 0 , {x: 25, y: 50})
         this.mapa1 = new Mapa();
         this.vybuch = new Explosion();
         this.gameBar = new GameBar({x:0, y : 10*64}, {x : 1216, y : 100 }, "rgb(224, 224, 184)");    
@@ -21,8 +21,8 @@ class Gameworld{
     
         this.restartButton = new Button({x: 600, y: 330}, {x: 170, y: 50}, "Restart","white","black","20px Arial");
         this.restartButton.action = () => {
-            this.tank.reset({x:200,y:200});
-            this.tank2.reset({x:400,y:200});
+            this.tank.reset({x:150,y:150});
+            this.tank2.reset({x:1100,y:500});
             this.eventHandler.keyInput[80] = 0;
         }
 
@@ -117,7 +117,7 @@ class Gameworld{
             for(var i = 0; i < pole.length; i++){       
                 pos.Y = Math.floor(pole[i].y  / this.mapa1.tileSize);
                 pos.X = Math.floor(pole[i].x / this.mapa1.tileSize) ;
-                if(this.mapa1.MapArray[pos.Y][pos.X] == 1){
+                if(this.mapa1.MapArray[this.mapa1.level][pos.Y][pos.X] == 1){
                     this.vybuch.counter = 20;
                     this.vybuch.position = pole[i];                    
                     
@@ -148,10 +148,10 @@ class Gameworld{
                 , y : tank.position.y - Math.sin(tank.rotation* Math.PI / 180)*tank.origin.x + Math.cos(tank.rotation* Math.PI / 180)*tank.origin.y 
             }    
 
-        if( this.mapa1.MapArray[Math.floor(rt.y / this.mapa1.tileSize)][Math.floor(rt.x / this.mapa1.tileSize)] == 1 ||
-            this.mapa1.MapArray[Math.floor(lt.y / this.mapa1.tileSize)][Math.floor(lt.x / this.mapa1.tileSize)] == 1 ||
-            this.mapa1.MapArray[Math.floor(rb.y / this.mapa1.tileSize)][Math.floor(rb.x / this.mapa1.tileSize)] == 1 ||
-            this.mapa1.MapArray[Math.floor(lb.y / this.mapa1.tileSize)][Math.floor(lb.x / this.mapa1.tileSize)] == 1  ){
+        if( this.mapa1.MapArray[this.mapa1.level][Math.floor(rt.y / this.mapa1.tileSize)][Math.floor(rt.x / this.mapa1.tileSize)] == 1 ||
+            this.mapa1.MapArray[this.mapa1.level][Math.floor(lt.y / this.mapa1.tileSize)][Math.floor(lt.x / this.mapa1.tileSize)] == 1 ||
+            this.mapa1.MapArray[this.mapa1.level][Math.floor(rb.y / this.mapa1.tileSize)][Math.floor(rb.x / this.mapa1.tileSize)] == 1 ||
+            this.mapa1.MapArray[this.mapa1.level][Math.floor(lb.y / this.mapa1.tileSize)][Math.floor(lb.x / this.mapa1.tileSize)] == 1  ){
             
             return 0 ;
             }
@@ -189,6 +189,7 @@ class Gameworld{
             this.vybuch.counter = 40;
             this.vybuch.position = tank.position;
             tank.life = 0.01;
+            this.nextLevel();
         }
     }
 
@@ -211,5 +212,13 @@ class Gameworld{
         this.menuButton.draw();
         this.restartButton.draw();
         Canvas.context.restore();
+    }
+
+    nextLevel(){
+        if(this.mapa1.level<this.mapa1.MapArray.length-1){
+            this.mapa1.level++;
+            this.tank.reset({x:150,y:150});
+            this.tank2.reset({x:1100,y:500});
+        }
     }
 }
