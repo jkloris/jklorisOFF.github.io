@@ -180,9 +180,17 @@ class Gameworld{
             }
 
             if(f == 1 && rt.y > lb.y){
-                if(rt.y>= raketa.y && lb.y <= raketa.y) return 1;
+                if(rt.y>= raketa.y && lb.y <= raketa.y){
+                    Sounds.vybuch.currentTime = 0;
+                    Sounds.vybuch.play();
+                    return 1;
+                }
             } else if(f == 1 && rt.y <= lb.y){
-                if(rt.y<= raketa.y && lb.y >= raketa.y) return 1;    
+                if(rt.y<= raketa.y && lb.y >= raketa.y){
+                    Sounds.vybuch.currentTime = 0;
+                    Sounds.vybuch.play();
+                    return 1 ;   
+                }     
             }
         
         return 0;
@@ -194,6 +202,7 @@ class Gameworld{
             this.vybuch.position = tank.position;
             tank.life = 0.01;
             tank.score++;
+            Sounds.vybuch.play();
             this.nextLevel();
         }
     }

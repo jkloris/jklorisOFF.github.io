@@ -125,6 +125,8 @@ class Tank{
             } 
             if(keyInput[77] == 1){
                 this.shoot();
+                Sounds.shot.currentTime = 0;
+                Sounds.shot.play();
                 keyInput[77] = 0;
             }
     }
@@ -133,6 +135,7 @@ class Tank{
         this.rotation = 0;
         this.life = this.maxLife;
         this.position = position;
+        this.strely = [];
     }
 
 }
@@ -195,6 +198,8 @@ class Tank2 extends Tank{
             } 
             if(keyInput[81] == 1){
                 this.shoot();
+                Sounds.shot.currentTime = 0;
+                Sounds.shot.play();
                 keyInput[81] = 0;
             }
         } 

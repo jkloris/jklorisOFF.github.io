@@ -39,6 +39,8 @@ function loadAssets(callback){
     Sounds.ingameMusic = document.getElementById("inGameSong");
     Sounds.ingameMusic.loop = true;
     Sounds.klik = document.getElementById("klik");
+    Sounds.shot = document.getElementById("shot");
+    Sounds.vybuch = document.getElementById("vybuch");
 
     AssetsLoading_loop(callback);
 }
