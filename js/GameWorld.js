@@ -45,6 +45,9 @@ class Gameworld{
 
     init(){
         this.restartButton.action();
+        this.tank.score = 0;
+        this.tank2.score = 0;
+        this.mapa1.level =0;
         Sounds.ingameMusic.play();
     }
 
@@ -98,6 +101,7 @@ class Gameworld{
         this.healthBar.drawBar(this.tank.life, this.tank.maxLife);
         this.healthBar2.drawBar(this.tank2.life, this.tank2.maxLife);
         this.buttonSound.draw();
+        this.drawScore();
 
         if(this.vybuch.counter > 0){
             this.vybuch.drawExplosion(this.vybuch.position, Math.floor(this.vybuch.counter / 3)*0.25);
@@ -189,6 +193,7 @@ class Gameworld{
             this.vybuch.counter = 40;
             this.vybuch.position = tank.position;
             tank.life = 0.01;
+            tank.score++;
             this.nextLevel();
         }
     }
@@ -214,11 +219,17 @@ class Gameworld{
         Canvas.context.restore();
     }
 
+    drawScore(){
+        Canvas.context.save();
+        Canvas.context.fillText(this.tank2.score, 250,700);
+        Canvas.context.fillText(this.tank.score, 950,700);
+        Canvas.context.restore();
+    }
+
     nextLevel(){
         if(this.mapa1.level<this.mapa1.MapArray.length-1){
             this.mapa1.level++;
-            this.tank.reset({x:150,y:150});
-            this.tank2.reset({x:1100,y:500});
-        }
+        } else this.mapa1.level = 0;
+        this.restartButton.action();
     }
 }

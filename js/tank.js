@@ -9,6 +9,7 @@ class Tank{
         this.speedR = 20;
         this.maxLife = 10;
         this.life = this.maxLife;
+        this.score = 0;
         
         this.strely = [];
         this.speedS = 8 ;
