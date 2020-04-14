@@ -55,14 +55,19 @@ class Sound extends Button{
     }
 
     action(){
+        function mute(Sounds, value){
+            Object.keys(Sounds).forEach(function(key){ Sounds[key].muted=value});
+            return Sounds;
+        }
+        
         if(this.soundON == 1) {
             this.soundON = 0;
-            Sounds.forEach(element => {
-                Sounds.element.muted = true;
-            });
+            mute(Sounds, true);
+            
         }
         else {
             this.soundON = 1;
+            mute(Sounds, false);
         }
     }
 

@@ -32,3 +32,21 @@ class HealthBar extends GameBar{
         Canvas.context.fillText(this.text,this.position.x + 70, this. position.y + 60 );
     }
 }
+
+class Timer extends GameBar{
+    constructor(position, size, color){
+        super(position, size, color)
+    }
+
+    drawBar(limit){
+        
+        Canvas.context.save();
+        Canvas.context.fillStyle = this.color;
+        Canvas.context.fillRect(this.position.x, this. position.y, this.size.x, this.size.y);
+        Canvas.context.fillStyle = "white";
+        Canvas.context.textAlign = "center";
+        Canvas.context.font = "30px Arial black";
+        Canvas.context.fillText(limit, this.position.x + this.size.x / 2, this.position.y +this.size.y / 2 + 7);
+        Canvas.context.restore();
+    }
+}

@@ -17,24 +17,27 @@ class stateManager{
             GameWorld : new Gameworld(this.eventHandler, this),
             mainMenu  : new Menu(this.eventHandler, this),
             instrukcie : new Instrukcie(this.eventHandler, this),
+            gameOver : new GameOver(this.eventHandler, this),
         };
         this.currentState = this.states.mainMenu;
+        this.buttonSound = new Sound({x: 1140, y: 650},{x: 64, y: 64});
     }
 
     update(){
-       // this.changeState();
+        this.buttonSound.update(this.eventHandler.mouseX, this.eventHandler.mouseY);
         this.currentState.update();
-        //console.log(this.eventHandler.mouseY);  
     }
 
     draw(){
         this.currentState.draw();    
+        this.buttonSound.draw();
     }
 
     changeState(){
         if(flag == 0) this.currentState = this.states.mainMenu;  //mozno pridat do konstanty string
         if(flag == 1) this.currentState = this.states.GameWorld;
         if(flag == 2) this.currentState = this.states.instrukcie;
+        if(flag == 3) this.currentState = this.states.gameOver;
         this.currentState.init();
     }
 
@@ -111,7 +114,6 @@ class stateManager{
         document.addEventListener("click",(e)=>{
             this.eventHandler.mouseX = e.clientX;
             this.eventHandler.mouseY = e.clientY; 
-            //console.log(this.eventHandler.mouseX);
         })
     }
 

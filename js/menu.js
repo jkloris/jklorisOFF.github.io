@@ -12,7 +12,6 @@ class Menu{
             flag = 2;
             this.statesManager.changeState();
         }
-        this.buttonSound = new Sound({x: 1100, y: 620},{x: 64, y: 64});
         this.eventHandler = eventHandler;
         this.statesManager = statesManager;
         
@@ -20,7 +19,7 @@ class Menu{
     }
     
     init(){
-
+        Sounds.ingameMusic.pause();
     }
     
     
@@ -28,7 +27,6 @@ class Menu{
     update(){
         this.button1.update(this.eventHandler.mouseX, this.eventHandler.mouseY);
         this.button2.update(this.eventHandler.mouseX, this.eventHandler.mouseY);
-        this.buttonSound.update(this.eventHandler.mouseX, this.eventHandler.mouseY);
         this.eventHandler.mouseY = -1;
         this.eventHandler.mouseX = -1;
         
@@ -38,7 +36,6 @@ class Menu{
         this.drawBackground();
         this.button1.draw();
         this.button2.draw();
-        this.buttonSound.draw();
 
     }
 

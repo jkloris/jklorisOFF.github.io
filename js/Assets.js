@@ -1,5 +1,5 @@
 let Sprites = {};
-let Sounds = [];
+let Sounds = {};
 let Notloaded_assets = 0;
 
 function AssetsLoading_loop(callback){
@@ -38,6 +38,7 @@ function loadAssets(callback){
     
     Sounds.ingameMusic = document.getElementById("inGameSong");
     Sounds.ingameMusic.loop = true;
+    Sounds.ingameMusic.volume = 0.5;
     Sounds.klik = document.getElementById("klik");
     Sounds.shot = document.getElementById("shot");
     Sounds.vybuch = document.getElementById("vybuch");

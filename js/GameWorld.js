@@ -7,35 +7,29 @@ class Gameworld{
         this.gameBar = new GameBar({x:0, y : 10*64}, {x : 1216, y : 100 }, "rgb(224, 224, 184)");    
         this.healthBar = new HealthBar({x:300, y : 10*64 + 10 }, {x : 200, y : 40 }, "red", "P1 health");
         this.healthBar2 = new HealthBar({x:700, y : 10*64 + 10 }, {x : 200, y : 40 }, "red", "P2 health");
-        this.buttonSound = new Sound({x: 1100, y: 650},{x: 64, y: 64});
-        this.buttonSound.action = ()=>{
-            if(this.buttonSound.soundON == 1) {
-                this.buttonSound.soundON = 0;
-                Sounds.ingameMusic.pause();
-            }
-            else {
-                this.buttonSound.soundON = 1;
-                Sounds.ingameMusic.play();
-            }
-        }
+        this.Timer = new Timer({x:20, y : 10*64+20}, {x : 100, y : 50 }, "black");
     
-        this.restartButton = new Button({x: 600, y: 330}, {x: 170, y: 50}, "Restart","white","black","20px Arial");
+    
+        this.restartButton = new Button({x: 600, y: 330}, {x: 170, y: 50}, "Restart level","white","black","20px Arial");
         this.restartButton.action = () => {
             this.tank.reset({x:150,y:150});
             this.tank2.reset({x:1100,y:500});
             this.eventHandler.keyInput[80] = 0;
+          
         }
 
         this.menuButton = new Button({x: 420, y: 330}, {x: 170, y: 50}, "Menu","white","black","20px Arial");
         this.menuButton.action = ()=>{
             flag = 0;
-            Sounds.ingameMusic.pause();
             this.statesManager.changeState();
         }
 
-        
         this.time = Date.now();
+        this.startTime = Date.now();
+        this.limit  = 30;
         this.dt = 0;
+        this.timeBuff = 0;
+
         this.eventHandler = eventHandler;
         this.statesManager = statesManager;
         this.paused = false;
@@ -44,22 +38,26 @@ class Gameworld{
     }
 
     init(){
+        this.paused = false;
+        this.startTime = Date.now();
+        this.limit  = 30;   
         this.restartButton.action();
         this.tank.score = 0;
         this.tank2.score = 0;
         this.mapa1.level =0;
+        Sounds.ingameMusic.currentTime =0;
         Sounds.ingameMusic.play();
     }
 
                 
     update(){
+        this.dt = ( Date.now()- this.time ) / 100;
+        this.time = Date.now(); 
         if(!this.paused){
 
-            this.dt = ( Date.now()- this.time ) / 100;
-            this.time = Date.now();
+            this.limit  = (30 - Math.floor((this.time - this.startTime)/1000));
+            if(this.limit <= 0) this.gameOver();
             
-            //this.input();
-            this.buttonSound.update(this.eventHandler.mouseX, this.eventHandler.mouseY);
             this.tank.update(this.eventHandler.keyInput, this.dt);     
             this.tank2.update(this.eventHandler.keyInput, this.dt);
             this.CollisionCheck_Shot(this.tank.strely, this.tank2);
@@ -81,10 +79,10 @@ class Gameworld{
             this.Death(this.tank);
             this.Death(this.tank2);
         } else{
+            this.startTime+=this.dt*100;
             this.menuButton.update(this.eventHandler.mouseX, this.eventHandler.mouseY);
             this.restartButton.update(this.eventHandler.mouseX, this.eventHandler.mouseY);
         }
-        console.log(this.paused);   
         this.pauseGame();
         this.eventHandler.mouseY = -1;
         this.eventHandler.mouseX = -1;
@@ -100,14 +98,14 @@ class Gameworld{
         this.gameBar.drawBar();
         this.healthBar.drawBar(this.tank.life, this.tank.maxLife);
         this.healthBar2.drawBar(this.tank2.life, this.tank2.maxLife);
-        this.buttonSound.draw();
+        this.Timer.drawBar(this.limit);
+        
         this.drawScore();
 
         if(this.vybuch.counter > 0){
             this.vybuch.drawExplosion(this.vybuch.position, Math.floor(this.vybuch.counter / 3)*0.25);
             this.vybuch.counter--;
         }
-        //console.log(this.paused);
         if(this.paused){
             this.drawPause();
         }
@@ -183,12 +181,14 @@ class Gameworld{
                 if(rt.y>= raketa.y && lb.y <= raketa.y){
                     Sounds.vybuch.currentTime = 0;
                     Sounds.vybuch.play();
+                    tank.score+=10;
                     return 1;
                 }
             } else if(f == 1 && rt.y <= lb.y){
                 if(rt.y<= raketa.y && lb.y >= raketa.y){
                     Sounds.vybuch.currentTime = 0;
                     Sounds.vybuch.play();
+                    tank.score+=10;
                     return 1 ;   
                 }     
             }
@@ -201,7 +201,7 @@ class Gameworld{
             this.vybuch.counter = 40;
             this.vybuch.position = tank.position;
             tank.life = 0.01;
-            tank.score++;
+            tank.score+=100;
             Sounds.vybuch.play();
             this.nextLevel();
         }
@@ -210,10 +210,20 @@ class Gameworld{
     pauseGame(){
         if(this.eventHandler.keyInput[80]==1){
             this.paused = true;
-            
+        
         } else {
             this.paused = false;
         }
+    }
+    
+    gameOver(){
+        if(this.tank.score > this.tank2.score) console.log("player 2 wins");
+        else if(this.tank.score < this.tank2.score) console.log("player 1 wins");
+        else console.log("draw");
+        Score.p1 = this.tank2.score;
+        Score.p2 = this.tank.score;
+        flag = 3;
+        this.statesManager.changeState();
     }
     
     drawPause(){
@@ -230,6 +240,7 @@ class Gameworld{
 
     drawScore(){
         Canvas.context.save();
+        Canvas.context.fillStyle = "black";
         Canvas.context.fillText(this.tank2.score, 250,700);
         Canvas.context.fillText(this.tank.score, 950,700);
         Canvas.context.restore();
@@ -242,3 +253,5 @@ class Gameworld{
         this.restartButton.action();
     }
 }
+
+Score = {};
