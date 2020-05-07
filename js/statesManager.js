@@ -15,6 +15,7 @@ class stateManager{
         this.states = {
         
             GameWorld : new Gameworld(this.eventHandler, this),
+            SinglePlayer : new Singleplayer(this.eventHandler, this),
             mainMenu  : new Menu(this.eventHandler, this),
             instrukcie : new Instrukcie(this.eventHandler, this),
             gameOver : new GameOver(this.eventHandler, this),
@@ -38,6 +39,7 @@ class stateManager{
         if(flag == 1) this.currentState = this.states.GameWorld;
         if(flag == 2) this.currentState = this.states.instrukcie;
         if(flag == 3) this.currentState = this.states.gameOver;
+        if(flag == 4) this.currentState = this.states.SinglePlayer;
         this.currentState.init();
     }
 

@@ -50,3 +50,29 @@ class Timer extends GameBar{
         Canvas.context.restore();
     }
 }
+
+class Zasobnik extends GameBar{
+    constructor(position, size, color){
+        super(position, size, color);
+
+    }
+
+    drawBar(counter, max){
+        Canvas.context.save();
+        Canvas.context.fillStyle = this.color;
+        Canvas.context.lineWidth = "2";
+        Canvas.context.strokeStyle = "black";
+        Canvas.context.fillRect(this.position.x, this. position.y, this.size.x, this.size.y);
+        Canvas.context.rect(this.position.x, this. position.y, this.size.x, this.size.y);
+        Canvas.context.stroke();
+        Canvas.context.restore();
+        var x = 5;
+        for(var i = 0; i < max - counter; i++){
+            Canvas.context.save();
+            Canvas.context.translate(this.position.x + x, this.position.y + 5)
+            Canvas.context.drawImage(Sprites.naboj, 0, 0);
+            Canvas.context.restore();
+            x+=20;
+        }
+    }
+}

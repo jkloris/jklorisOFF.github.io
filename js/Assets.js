@@ -35,6 +35,7 @@ function loadAssets(callback){
     Sprites.soundON = loadIMG("Obrazky/", "Sound_icon.png");
     Sprites.soundOFF = loadIMG("Obrazky/", "Sound_iconOFF.png");
     Sprites.instrukcie = loadIMG("Obrazky/", "Instrukcie.png");
+    Sprites.naboj = loadIMG("Obrazky/", "naboj.png");
     
     Sounds.ingameMusic = document.getElementById("inGameSong");
     Sounds.ingameMusic.loop = true;
