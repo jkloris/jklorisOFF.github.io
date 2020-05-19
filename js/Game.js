@@ -25,4 +25,5 @@ class Game{
 
 
 let flag = 0;
+let difficulty = 0;
 let TankTrouble = new Game();

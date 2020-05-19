@@ -29,11 +29,11 @@ function loadAssets(callback){
     Sprites.tankIMG = loadIMG("Obrazky/", "Tank_brown.png");
     Sprites.tank2IMG = loadIMG("Obrazky/", "Tank_green.png");
     Sprites.raketa = loadIMG("Obrazky/", "raketa2.png");
-    Sprites.brick = loadIMG("Obrazky/", "Wall_brick.png");
+    Sprites.brick = loadIMG("Obrazky/", "Wall_brick_sheet.png");
     Sprites.vybuch = loadIMG("Obrazky/", "vybuch.png");
     Sprites.menu = loadIMG("Obrazky/", "Menu_pozadie.png");
     Sprites.soundON = loadIMG("Obrazky/", "Sound_icon.png");
-    Sprites.soundOFF = loadIMG("Obrazky/", "Sound_iconOFF.png");
+    // Sprites.soundOFF = loadIMG("Obrazky/", "Sound_iconOFF.png");
     Sprites.instrukcie = loadIMG("Obrazky/", "Instrukcie.png");
     Sprites.naboj = loadIMG("Obrazky/", "naboj.png");
     

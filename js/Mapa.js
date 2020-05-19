@@ -53,17 +53,23 @@ class Mapa{
     drawMap(){
         for(var r= 0; r < this.mapSize.y; r++){
             for(var s = 0; s < this.mapSize.x; s++){
-                if(this.MapArray[this.level][r][s] == 1 ){
-                    this.drawTile(r,s) ;
+                if(this.MapArray[this.level][r][s] > 0 ){
+                    this.drawTile(r,s, this.MapArray[this.level][r][s]) ;
                 }
             }
         }
     }
 
-    drawTile(r,s){
+   
+
+    drawTile(r,s, val){
         Canvas.context.save();
         Canvas.context.translate(s*this.tileSize, r*this.tileSize); //zachovaj poradie!!
-        Canvas.context.drawImage(Sprites.brick, 0 , 0 ); 
+        if(val < 3)
+            Canvas.context.drawImage(Sprites.brick, (val - 1)*64, 0,64,64, 0 ,0,64,64); 
+        else
+            Canvas.context.drawImage(Sprites.brick, (val - 3)*64, 64 ,64,64, 0 ,0,64,64); 
+            
         Canvas.context.restore();
     }
 

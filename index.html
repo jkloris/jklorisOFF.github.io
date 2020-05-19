@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Hra</title>
-</head>
-<body>
-    <canvas id="canvas1" width="1216"  height="720">   </canvas>
+    <head>
+        <meta charset="UTF-8">
+        <title>Hra</title>
+        
+    </head>
+    <body>
+        <canvas id="canvas1" width="1216"  height="720">   </canvas>
+        <audio src="Zvuky/Heavy Metal Instrumental - Game Over.mp3" type="audio/mpeg" id="inGameSong"></audio>
+        <audio src="Zvuky/click.mp3" type="audio/mpeg" id="klik"></audio>
+        <audio src="Zvuky/shot.mp3" type="audio/mpeg" id="shot"></audio>
+        <audio src="Zvuky/explosion.mp3" type="audio/mpeg" id="vybuch"></audio>
 
+        
     <script src="js/Canvas.js"> </script>
     <script src="js/Assets.js"> </script>
     <script src="js/GameWorld.js"> </script>
@@ -21,14 +27,14 @@
     <script src="js/instrukcie.js"> </script> 
     <script src="js/statesManager.js"> </script> 
 
-    <audio src="Zvuky/Heavy Metal Instrumental - Game Over.mp3" type="audio/mpeg" id="inGameSong"></audio>
-    <audio src="Zvuky/click.mp3" type="audio/mpeg" id="klik"></audio>
-    <audio src="Zvuky/shot.mp3" type="audio/mpeg" id="shot"></audio>
-    <audio src="Zvuky/explosion.mp3" type="audio/mpeg" id="vybuch"></audio>
 
-    <script>
-        loadAssets(TankTrouble.start)   ;
-    </script>
+    
+
+    <!-- <script>
+        
+    </script> -->
+
+    
 
 
     

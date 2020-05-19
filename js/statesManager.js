@@ -121,3 +121,5 @@ class stateManager{
 
 
 }
+
+document.onload(loadAssets(TankTrouble.start));

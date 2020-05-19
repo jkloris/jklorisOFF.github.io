@@ -49,7 +49,7 @@ class Sound extends Button{
         if(this.soundON==1){
             Canvas.context.drawImage(Sprites.soundON, 0, 0);
         } else{
-            Canvas.context.drawImage(Sprites.soundOFF, 0, 0);
+            Canvas.context.drawImage(Sprites.soundON, -20, 0,64,64, -20,0,64,64);
         }
         Canvas.context.restore();
     }

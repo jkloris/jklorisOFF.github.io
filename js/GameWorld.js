@@ -1,6 +1,7 @@
 class Gameworld{
     constructor(eventHandler, statesManager){
         this.mapa1 = new Mapa();
+        this.mapa_cpy = new Mapa();
         this.tank = new Tank({x: 100, y: 100}, 0 , {x: 25, y: 50});
         this.tank2 = new Tank2({x:1100,y:500}, 0 , {x: 25, y: 50});
         this.vybuch = new Explosion();
@@ -10,6 +11,7 @@ class Gameworld{
         this.Timer = new Timer({x:20, y : 10*64+20}, {x : 100, y : 50 }, "black");
         this.zasobnik = new Zasobnik({x:150, y : 10*64 + 10 }, {x : 102, y : 40 }, "white");
         this.zasobnik2 = new Zasobnik({x:950, y : 10*64 + 10 }, {x : 102, y : 40 }, "white");
+        this.timeSet = 100;
     
     
         this.restartButton = new Button({x: 600, y: 330}, {x: 170, y: 50}, "Restart level","white","black","20px Arial");
@@ -17,6 +19,7 @@ class Gameworld{
             this.tank.reset({x:150,y:150});
             this.tank2.reset({x:1100,y:500});
             this.eventHandler.keyInput[80] = 0;
+            this.resetMap();
           
         }
 
@@ -49,6 +52,7 @@ class Gameworld{
         this.mapa1.level =0;
         Sounds.ingameMusic.currentTime =0;
         Sounds.ingameMusic.play();
+        
     }
 
                 
@@ -57,7 +61,7 @@ class Gameworld{
         this.time = Date.now(); 
         if(!this.paused){
 
-            this.limit  = (60 - Math.floor((this.time - this.startTime)/1000));
+            this.limit  = (this.timeSet - Math.floor((this.time - this.startTime)/1000));
             if(this.limit <= 0) this.gameOver();
             
             this.tank.update(this.eventHandler.keyInput, this.dt);     
@@ -115,6 +119,15 @@ class Gameworld{
 
     }
 
+    resetMap(){
+        for(var r= 0; r < this.mapa1.mapSize.y; r++){
+            for(var s = 0; s < this.mapa1.mapSize.x; s++){
+                    this.mapa1.MapArray[this.mapa1.level][r][s]=this.mapa_cpy.MapArray[this.mapa1.level][r][s] ;
+            }
+        }  
+        console.log("reset ----------------");
+    }
+
     CollisionCheck_Shot(pole, tank){
         if(pole.length > 0){
 
@@ -122,11 +135,16 @@ class Gameworld{
             for(var i = 0; i < pole.length; i++){       
                 pos.Y = Math.floor(pole[i].y  / this.mapa1.tileSize);
                 pos.X = Math.floor(pole[i].x / this.mapa1.tileSize) ;
-                if(this.mapa1.MapArray[this.mapa1.level][pos.Y][pos.X] == 1){
+                if(this.mapa1.MapArray[this.mapa1.level][pos.Y][pos.X] >= 1){
                     this.vybuch.counter = 20;
                     this.vybuch.position = pole[i];                    
                     
                     pole.splice(i,1);
+                    if(pos.Y > 0 && pos.Y < this.mapa1.mapSize.y-1 && pos.X > 0 && pos.X < this.mapa1.mapSize.x-1)
+                        this.mapa1.MapArray[this.mapa1.level][pos.Y][pos.X]++;
+                    if(this.mapa1.MapArray[this.mapa1.level][pos.Y][pos.X]>4 ){
+                        this.mapa1.MapArray[this.mapa1.level][pos.Y][pos.X] = 0;
+                    }
                 
                 } else if(this.hitDetection(tank, pole[i]) == 1){
                     this.vybuch.counter = 20;
@@ -153,10 +171,10 @@ class Gameworld{
                 , y : tank.position.y - Math.sin(tank.rotation* Math.PI / 180)*tank.origin.x + Math.cos(tank.rotation* Math.PI / 180)*tank.origin.y 
             }    
 
-        if( this.mapa1.MapArray[this.mapa1.level][Math.floor(rt.y / this.mapa1.tileSize)][Math.floor(rt.x / this.mapa1.tileSize)] == 1 ||
-            this.mapa1.MapArray[this.mapa1.level][Math.floor(lt.y / this.mapa1.tileSize)][Math.floor(lt.x / this.mapa1.tileSize)] == 1 ||
-            this.mapa1.MapArray[this.mapa1.level][Math.floor(rb.y / this.mapa1.tileSize)][Math.floor(rb.x / this.mapa1.tileSize)] == 1 ||
-            this.mapa1.MapArray[this.mapa1.level][Math.floor(lb.y / this.mapa1.tileSize)][Math.floor(lb.x / this.mapa1.tileSize)] == 1  ){
+        if( this.mapa1.MapArray[this.mapa1.level][Math.floor(rt.y / this.mapa1.tileSize)][Math.floor(rt.x / this.mapa1.tileSize)] >= 1 ||
+            this.mapa1.MapArray[this.mapa1.level][Math.floor(lt.y / this.mapa1.tileSize)][Math.floor(lt.x / this.mapa1.tileSize)] >= 1 ||
+            this.mapa1.MapArray[this.mapa1.level][Math.floor(rb.y / this.mapa1.tileSize)][Math.floor(rb.x / this.mapa1.tileSize)] >= 1 ||
+            this.mapa1.MapArray[this.mapa1.level][Math.floor(lb.y / this.mapa1.tileSize)][Math.floor(lb.x / this.mapa1.tileSize)] >= 1  ){
             
             return 0 ;
             }
@@ -173,6 +191,8 @@ class Gameworld{
             var lb = {x : tank.position.x -  Math.cos(tank.rotation* Math.PI / 180)*tank.origin.x - Math.sin(tank.rotation* Math.PI / 180)*tank.origin.y 
                 , y : tank.position.y - Math.sin(tank.rotation* Math.PI / 180)*tank.origin.x + Math.cos(tank.rotation* Math.PI / 180)*tank.origin.y 
             } 
+            var vzdialenost = Math.sqrt(Math.pow(tank.position.x - raketa.x, 2) + Math.pow(tank.position.y - raketa.y,2));
+            console.log(vzdialenost);
     
             if(rt.x > lb.x) {
                 if(rt.x>= raketa.x && lb.x <= raketa.x)  f= 1;
@@ -181,14 +201,16 @@ class Gameworld{
             }
 
             if(f == 1 && rt.y > lb.y){
-                if(rt.y>= raketa.y && lb.y <= raketa.y){
+                // console.log(vzdialenost);
+                
+                if((vzdialenost < tank.origin.x) || (rt.y>= raketa.y && lb.y <= raketa.y)){
                     Sounds.vybuch.currentTime = 0;
                     Sounds.vybuch.play();
                     tank.score+=10;
                     return 1;
                 }
             } else if(f == 1 && rt.y <= lb.y){
-                if(rt.y<= raketa.y && lb.y >= raketa.y){
+                if((vzdialenost < tank.origin.x) ||(rt.y<= raketa.y && lb.y >= raketa.y)){
                     Sounds.vybuch.currentTime = 0;
                     Sounds.vybuch.play();
                     tank.score+=10;
@@ -250,10 +272,10 @@ class Gameworld{
     }
 
     nextLevel(){
+        this.restartButton.action();
         if(this.mapa1.level<this.mapa1.MapArray.length-1){
             this.mapa1.level++;
         } else this.mapa1.level = 0;
-        this.restartButton.action();
     }
 }
 
@@ -278,7 +300,9 @@ class Singleplayer extends Gameworld{
         this.restartButton.action = () => {
             this.tank.reset({x:150,y:150});
             this.tank2.reset({x:1100,y:500});
+           
             this.eventHandler.keyInput[80] = 0;
+            this.resetMap();
           
         }
 
@@ -309,11 +333,34 @@ class Singleplayer extends Gameworld{
         this.startTime = Date.now();
         this.limit  = 60;   
         this.restartButton.action();
+        if(difficulty == 0){
+            this.tank2.speed = 20;
+            this.tank2.maxLife = 7;
+            this.tank2.life = this.tank2.maxLife;
+            this.tank2.maxS = 5;
+            this.tank2.speedS = 8;
+            this.tank2.reloadS = 10;
+        } else if(difficulty == 1){
+            this.tank2.speed = 30;
+            this.tank2.maxLife = 15;
+            this.tank2.life = this.tank2.maxLife;
+            this.tank2.maxS = 20;
+            this.tank2.speedS = 15;
+            this.tank2.reloadS = 5;
+        } else if (difficulty == 2){
+            this.tank2.speed = 40;
+            this.tank2.maxLife = 15;
+            this.tank2.life = this.tank2.maxLife;
+            this.tank2.maxS = 100;
+            this.tank2.speedS = 20;
+            this.tank2.reloadS = 0.5; 
+        }
         this.tank.score = 0;
         this.tank2.score = 0;
         this.mapa1.level = 3;
         Sounds.ingameMusic.currentTime =0;
         Sounds.ingameMusic.play();
+        
     }
 
     update(){
@@ -321,11 +368,10 @@ class Singleplayer extends Gameworld{
         this.time = Date.now(); 
         if(!this.paused){
 
-            this.limit  = (60 - Math.floor((this.time - this.startTime)/1000));
+            this.limit  = (this.timeSet - Math.floor((this.time - this.startTime)/1000));
             if(this.limit <= 0) this.gameOver();
             this.tank.update(this.eventHandler.keyInput, this.dt);     
             this.tank2.update(this.eventHandler.keyInput, this.dt, this.tank.position);
-            console.log(this.tank2);
             this.CollisionCheck_Shot(this.tank.strely, this.tank2);
             this.CollisionCheck_Shot(this.tank2.strely, this.tank);
             
